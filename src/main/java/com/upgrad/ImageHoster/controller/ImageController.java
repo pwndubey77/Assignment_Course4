@@ -105,19 +105,20 @@ public class ImageController {
             Image newImage = new Image(title, description, uploadedImageData, currUser, imageTags);
             imageService.save(newImage);
 
-            return "redirect:/images/" + newImage.getTitle();
+            return "redirect:/images/" + newImage.getId();
         }
     }
 
     /**
      * This controller shows a specific image
-     * @param title the title of the image that we want to retrieve
+     * @paramtitle the title of the image that we want to retrieve
      * @param model used to pass data to the view for rendering
      *
      * @return view for the image that was requested
      */
-    @RequestMapping("/images/{title}")
-    public String showImage(@PathVariable String title, Model model) {
+ /*   @RequestMapping("/images/{title}")
+    public String showImage1(@PathVariable String title, Model model) {
+
         Image image = imageService.getByTitleWithJoin(title);
         image.setNumView(image.getNumView() + 1);
         imageService.update(image);
@@ -127,7 +128,7 @@ public class ImageController {
         model.addAttribute("tags", image.getTags());
 
         return "images/image";
-    }
+    }*/
 
     /**
      * This method deletes a specific image from the database
@@ -266,4 +267,21 @@ public class ImageController {
 
         return tagString;
     }
+
+    @RequestMapping("/images/{id}")
+    public String showImage(@PathVariable("id") int imageId, Model model) {
+
+        Image image = imageService.getByIdWithJoin(imageId);
+        image.setNumView(image.getNumView() + 1);
+        imageService.update(image);
+
+        model.addAttribute("title", image.getTitle());
+        model.addAttribute("user", image.getUser());
+        model.addAttribute("image", image);
+        model.addAttribute("tags", image.getTags());
+
+        return "images/image";
+    }
+
+
 }
