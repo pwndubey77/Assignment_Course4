@@ -14,7 +14,9 @@ import org.hibernate.annotations.Entity;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,9 @@ import org.hibernate.criterion.Restrictions;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -44,10 +49,11 @@ public class UserController {
     /**
      * This controller method renders the user signup view
      *
-     * @param session HTTP session to check if the user is logged in
+     * @paramsession HTTP session to check if the user is logged in
      *
      * @return the user sign up view
      */
+
     @RequestMapping(value = "/signup")
     public String signUp(HttpSession session) {
         // If the user is not logged in, render the user sign up view
@@ -71,7 +77,8 @@ public class UserController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signUpUser(@RequestParam("username") String username,
                              @RequestParam("password") String password,
-                               HttpSession session) {
+                               HttpSession session, Model model) {
+
         // We'll first assign a default photo to the user
         ProfilePhoto photo = new ProfilePhoto();
         profilePhotoService.save(photo);
@@ -80,6 +87,11 @@ public class UserController {
         // in the database. Therefore, if your a hacker gains access to your
         // database, the hacker cannot see the password for your users
         String passwordHash = hashPassword(password);
+
+        //ExtendedModelMap errors  = new ExtendedModelMap();
+
+        HashMap<String,String> signUpError = new HashMap<>();//new hashmap to store messages
+
         User user = new User(username, passwordHash, photo);
 
         /* check for username's entry in database */
@@ -95,7 +107,13 @@ public class UserController {
 
         }
         else{
-            return "redirect:/";
+
+            /* Displaying the information of existing user by model attribute*/
+            signUpError.put("username","The Username - " + username +" already exists ");
+
+            model.addAttribute("errors",signUpError);
+
+            return "users/signup";
         }
     }
 
