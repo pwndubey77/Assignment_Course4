@@ -45,7 +45,7 @@
                 </li>
             </ul>
             <h5 class="f4 mb0 underline">Comments</h5>
-            <form method="POST" enctype="multipart/form-data" th:action="'/image/'+${image.title}+'/comments/create'" th:if="${session.currUser}">
+            <form method="POST" enctype="multipart/form-data" th:action="'/image/'+${image.id}+'/comments/create'" th:if="${session.currUser}">
                 <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
                     <div class="mt3">
                         <label class="db fw6 lh-copy f6" for="comment">Write a comment</label>

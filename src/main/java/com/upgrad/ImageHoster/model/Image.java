@@ -45,6 +45,11 @@ public class Image implements Serializable{
         inverseJoinColumns = { @JoinColumn(name = "tag_id")})
     private List<Tag> tags = new ArrayList<Tag>();
 
+/*
+    // These  annotations creates a join table for many-to-many relationships
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Comment> userComment = new ArrayList<Comment>();
+*/
 
     public Image() { }
 
@@ -107,6 +112,14 @@ public class Image implements Serializable{
     public List<Tag> getTags() { return tags; }
 
     public void setTags(List<Tag> tags) { this.tags = tags; }
+/*
+    public List<Comment> getUserComment() {
+        return userComment;
+    }
 
+    public void setUserComment(List<Comment> userComment) {
+        this.userComment = userComment;
+    }
+*/
 
 }

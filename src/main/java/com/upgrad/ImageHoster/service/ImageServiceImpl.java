@@ -38,4 +38,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void update(Image newImage) { imageManager.updateImage(newImage); }
+
+    @Override
+    public Image getByIdWithJoin(int imageID) { return imageManager.getImageByIdWithJoins(imageID); }
 }
