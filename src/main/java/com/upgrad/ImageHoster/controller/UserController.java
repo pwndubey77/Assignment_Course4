@@ -14,7 +14,6 @@ import org.hibernate.annotations.Entity;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,8 +86,6 @@ public class UserController {
         // in the database. Therefore, if your a hacker gains access to your
         // database, the hacker cannot see the password for your users
         String passwordHash = hashPassword(password);
-
-        //ExtendedModelMap errors  = new ExtendedModelMap();
 
         HashMap<String,String> signUpError = new HashMap<>();//new hashmap to store messages
 
