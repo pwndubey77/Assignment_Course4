@@ -39,4 +39,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) { userManager.update(user); }
+
+    @Override
+    public boolean validateUser(String username){
+        //checks username entry in databse
+        if (userManager.getUserByName(username) != null) {
+            return false;
+        }
+
+        return true;
+    }
 }

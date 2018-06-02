@@ -8,4 +8,5 @@ public interface UserService{
     User getByNameWithProfilePhoto(String username);
     boolean register(User user);
     void update(User user);
+    boolean validateUser(String username);//to check user's entry in database
 }

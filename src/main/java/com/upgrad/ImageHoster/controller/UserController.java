@@ -2,10 +2,16 @@ package com.upgrad.ImageHoster.controller;
 
 
 import com.google.common.hash.Hashing;
+import com.upgrad.ImageHoster.common.UserManager;
 import com.upgrad.ImageHoster.model.ProfilePhoto;
 import com.upgrad.ImageHoster.model.User;
 import com.upgrad.ImageHoster.service.ProfilePhotoService;
 import com.upgrad.ImageHoster.service.UserService;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.annotations.Entity;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -24,6 +34,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserService getUserService;
 
     @Autowired
     private ProfilePhotoService profilePhotoService;
@@ -68,13 +81,22 @@ public class UserController {
         // database, the hacker cannot see the password for your users
         String passwordHash = hashPassword(password);
         User user = new User(username, passwordHash, photo);
-        userService.register(user);
 
-        // We want to create an "currUser" attribute in the HTTP session, and store the user
-        // as the attribute's value to signify that the user has logged in
-        session.setAttribute("currUser", user);
+        /* check for username's entry in database */
+        if (userService.validateUser(username)) {
 
-        return "redirect:/";
+            userService.register(user);
+
+            // We want to create an "currUser" attribute in the HTTP session, and store the user
+            // as the attribute's value to signify that the user has logged in
+            session.setAttribute("currUser", user);
+
+            return "redirect:/";
+
+        }
+        else{
+            return "redirect:/";
+        }
     }
 
     /**
