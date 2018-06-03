@@ -88,11 +88,44 @@ public class UserController {
         String passwordHash = hashPassword(password);
 
         HashMap<String,String> signUpError = new HashMap<>();//new hashmap to store messages
-
+        int errorNo = 0;
         User user = new User(username, passwordHash, photo);
 
+        errorNo = userService.validateUser(username,password);
         /* check for username's entry in database */
-        if (userService.validateUser(username)) {
+        if (errorNo == 1) {
+
+            /* Displaying the information of existing user by model attribute*/
+            signUpError.put("username","The Username - '" + username +"' has been registered");
+
+            model.addAttribute("errors",signUpError);
+
+            return "users/signup";
+
+
+
+        }
+        else if(errorNo == 2){
+
+            /* Displaying the information of existing user by model attribute*/
+            signUpError.put("username","Username needs to be 6 characters or longer");
+
+            model.addAttribute("errors",signUpError);
+
+            return "users/signup";
+        }
+
+        else if(errorNo == 3){
+
+            /* Displaying the information of existing user by model attribute*/
+            signUpError.put("password","Password needs to be 6 characters or longer");
+
+            model.addAttribute("errors",signUpError);
+
+            return "users/signup";
+        }
+
+        else{
 
             userService.register(user);
 
@@ -101,16 +134,6 @@ public class UserController {
             session.setAttribute("currUser", user);
 
             return "redirect:/";
-
-        }
-        else{
-
-            /* Displaying the information of existing user by model attribute*/
-            signUpError.put("username","The Username - " + username +" already exists ");
-
-            model.addAttribute("errors",signUpError);
-
-            return "users/signup";
         }
     }
 
