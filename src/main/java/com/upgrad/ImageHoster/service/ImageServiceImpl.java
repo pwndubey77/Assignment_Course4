@@ -41,4 +41,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image getByIdWithJoin(int imageID) { return imageManager.getImageByIdWithJoins(imageID); }
+
+    @Override
+    public void deleteById(Image image) {
+        imageManager.deleteImageById(image.getId());
+    }
 }
